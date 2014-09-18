@@ -1,4 +1,5 @@
-tianaBox = function() { 
+tianaBox = function(minSlides) { 
+    //minSlides - Количество слайдов, которое влезает в пейджер
     'use strict'
     //Tiana fancybox        
     var html =  "<div class='tianabox'>"+
@@ -59,12 +60,13 @@ tianaBox = function() {
             prevArrow: tbox.find(".viewport-wrap .prev"),
             nextArrow: tbox.find(".viewport-wrap .next")
         }); 
-        tbox.find(".previews .list").slick({//Инициализировать слайдер превью
+        var pagerSlider = tbox.find(".previews .list").slick({//Инициализировать слайдер превью
             slide: "li",
-            slidesToShow: 6,
+            slidesToShow: minSlides,
             prevArrow: tbox.find(".gallery .prev"),
             nextArrow: tbox.find(".gallery .next")
         });
+        pagerSlider.data("slidesCount", prevs.length);
         tbox.find(".gallery .list li").on("click", "a", function() {      
             event.preventDefault();    
             mainSlider.slickGoTo(+$(this).attr("href"));
@@ -81,6 +83,8 @@ tianaBox = function() {
         id = "#"+id;
         $(id).show()
         .find(".viewport").slickGoTo(+$(this).attr("index"));
-        $(id).find(".previews .list").slickGoTo(+$(this).attr("index"));
+        if ($(id).find(".previews .list").data("slidesCount")>minSlides) {
+            $(id).find(".previews .list").slickGoTo(+$(this).attr("index"));
+        };        
     });
 };
